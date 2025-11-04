@@ -1,0 +1,5 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/dashboard-page.json",
+  "id": "6758c1e0-55d3-4d47-a030-1a3742a91d41",
+  "title": "Countdown Timer Bar Widget"
+}

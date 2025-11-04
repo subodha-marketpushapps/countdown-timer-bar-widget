@@ -1,0 +1,5 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/wix-config.json",
+  "appId": "b2fb4241-a596-45ed-bfd2-25244dd3536a",
+  "projectId": "countdown-timer-bar-widget"
+}
