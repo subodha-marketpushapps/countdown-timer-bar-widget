@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from "react";
-import { Box, IconButton } from "@wix/design-system";
+import { Box, IconButton, Text } from "@wix/design-system";
 import * as Icons from "@wix/wix-ui-icons-common";
 import "./Carousel.css";
 
@@ -184,7 +184,8 @@ const Carousel: React.FC<CarouselProps> = ({
         >
           <Box direction="vertical" align="center" gap={1}>
             {currentItem.label && (
-              <div className="carousel-label">{currentItem.label}</div>
+            //   <div className="carousel-label">{currentItem.label}</div>
+            <Text size="small" secondary>{currentItem.label}</Text>
             )}
             {currentItem.content}
           </Box>

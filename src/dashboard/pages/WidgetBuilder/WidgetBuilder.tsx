@@ -36,6 +36,7 @@ import {
   PanelPosition,
   PanelVisibility,
 } from "./SidePanels";
+import CountDownTemplate from "../../../components/WidgetCountDown/CountDownTemplate";
 // import { checkAgentAvailability } from "../../../components/WidgetWhatsappChat/utils";
 
 const Builder: React.FC<{
@@ -392,12 +393,27 @@ const Builder: React.FC<{
               {!isLoading && DEV_CONFIG.ui.showPreviewControls && (
                 <Box
                   position="absolute"
-                  top="60px"
+                  top="100px"
                   left="16px"
                   zIndex={10}
-                  maxWidth="320px"
                 >
-                  <h2>WidgetPreviewControlPanel</h2>
+                  <CountDownTemplate
+                    clockConfig={{
+                        labelPosition: "bottom",
+                        numberStyle: "filled",
+                        endDate: new Date("2025-12-31"),
+                        endTime: "23:59:59",
+                        backgroundColor: "#f59e0b",
+                        textColor: "#ffffff",
+                    }}
+                    title="Flash Sale"
+                    subTitle="Limited Stock"
+                    buttonText="Buy Now"
+                    buttonLink="https://example.com/buy"
+                    // scale={0.5}
+                />
+
+                  {/* <h2>WidgetPreviewControlPanel</h2> */}
                   {/* <WidgetPreviewControlPanel
                     previewControl={previewControl}
                     agents={draftState.content.members}
@@ -445,7 +461,7 @@ const Builder: React.FC<{
                 position="relative"
                 zIndex={2}
               >
-                <h1>Hello World</h1>
+
                 </Box>
                 // <WidgetController
                 //   key={welcomePopupKey}

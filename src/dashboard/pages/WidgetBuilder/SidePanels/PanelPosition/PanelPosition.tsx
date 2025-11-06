@@ -1,12 +1,11 @@
 import React from "react";
-import { SidePanel, Tabs } from "@wix/design-system";
+import { Box, FormField, SidePanel, Radio } from "@wix/design-system";
 
 import { WidgetStyles } from "../../../../../interfaces";
-import SubPanelPositionDesktop from "./SubPanelPositionDesktop";
-import SubPanelPositionMobile from "./SubPanelPositionMobile";
 import { DEFAULT_PANEL_WIDTH } from "../SidePanelContainer";
 import { useRecoilState } from "recoil";
 import { editorState } from "../../../../services/state";
+import { renderSectionTitle } from "../utils";
 
 interface Props {
   options: WidgetStyles;
@@ -32,50 +31,32 @@ const PanelPosition: React.FC<Props> = ({
     }));
   };
 
-  const renderSettingsPanel = () => (
+
+
+  return (
     <SidePanel
       onCloseButtonClick={handleCloseSidePanel}
       width={DEFAULT_PANEL_WIDTH}
       maxHeight="100%"
     >
-      <SidePanel.Header title="Position settings" showDivider={false}>
-        <Tabs
-          items={[
-            { id: "desktopView", title: "Desktop" },
-            { id: "mobileView", title: "Mobile" },
-          ]}
-          activeId={editorStateData.viewType}
-          type="uniformSide"
-          width="114px"
-          onClick={(value) => handleTabChange(value.id)}
-        />
+      <SidePanel.Header title="Position" showDivider={false}>
+    
       </SidePanel.Header>
-      {editorStateData.viewType === "desktopView" && (
-        <SubPanelPositionDesktop
-          options={options}
-          onChange={(positionOptions) =>
-            onChange({
-              ...options,
-              ...positionOptions,
-            })
-          }
-        />
-      )}
-      {editorStateData.viewType === "mobileView" && (
-        <SubPanelPositionMobile
-          options={options}
-          onChange={(positionOptions) =>
-            onChange({
-              ...options,
-              ...positionOptions,
-            })
-          }
-        />
-      )}
+      <SidePanel.Section title={renderSectionTitle("Position")}>
+          <SidePanel.Field divider={false}>
+            <FormField>
+              <Box direction="vertical" gap="8px">
+                <Radio label="Centered Overlay Banner" value="centered_overlay" />
+                <Radio label="Static Top Banner" value="static_top" />
+                <Radio label="Floating Top Banner" value="floating_top" />
+                <Radio label="Floating Bottom Banner" value="floating_bottom" />
+              </Box>
+            </FormField>
+          </SidePanel.Field>
+        </SidePanel.Section>
+      
     </SidePanel>
   );
-
-  return <>{renderSettingsPanel()}</>;
 };
 
 export default PanelPosition;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, FormField, SidePanel, Input, Box, Text, ToggleSwitch } from "@wix/design-system";
+import { Layout, FormField, SidePanel, Input, Box, Text, ToggleSwitch, Image } from "@wix/design-system";
 
 import { site } from "@wix/site-site";
 import { WidgetContent } from "../../../../../interfaces";
@@ -8,6 +8,13 @@ import { DEFAULT_PANEL_WIDTH } from "../SidePanelContainer";
 import Clock from "../../../../../components/WidgetCountDown/Clock";
 import CountDownTemplate, { CountdownBannerProps } from "../../../../../components/WidgetCountDown/CountDownTemplate";
 import Carousel, { CarouselItem } from "../../../../components/common/Carousel";
+
+// Import template background images
+import blackFridayImage from "../../../../../assets/images/template-background/black_friday.png";
+import halloweenImage from "../../../../../assets/images/template-background/halloween.png";
+import limitedTimeOfferImage from "../../../../../assets/images/template-background/limited_time_offer.png";
+import christmas1Image from "../../../../../assets/images/template-background/templat_christmas_1.png";
+import christmas2Image from "../../../../../assets/images/template-background/templat_christmas_2.png";
 
 interface Props {
     options: WidgetContent;
@@ -166,6 +173,90 @@ const PanelAppearance: React.FC<Props> = ({
         },
     ];
 
+    // Theme background images for the carousel
+    const themeItems: CarouselItem[] = [
+        {
+            id: "theme-1",
+            label: "Black Friday",
+            content: (
+                <Box width="100%" align="center" style={{ padding: "10px", borderRadius: "0" }}>
+                    <Image
+                        src={blackFridayImage}
+                        alt="Black Friday Theme"
+                        width="100%"
+                        height="auto"
+                        borderRadius={'0px'}
+                        style={{ maxWidth: "100%", borderRadius: "0" }}
+                    />
+                </Box>
+            ),
+        },
+        {
+            id: "theme-2",
+            label: "Halloween",
+            content: (
+                <Box width="100%" align="center" style={{ padding: "10px", borderRadius: "0" }}>
+                    <Image
+                        src={halloweenImage}
+                        alt="Halloween Theme"
+                        width="100%"
+                        height="auto"
+                        borderRadius={'0px'}
+                        style={{ maxWidth: "100%", borderRadius: "0" }}
+                    />
+                </Box>
+            ),
+        },
+        {
+            id: "theme-3",
+            label: "Limited Time Offer",
+            content: (
+                <Box width="100%" align="center" style={{ padding: "10px" }}>
+                    <Image
+                        src={limitedTimeOfferImage}
+                        alt="Limited Time Offer Theme"
+                        width="100%"
+                        height="auto"
+                        borderRadius={'0px'}
+                        style={{ maxWidth: "100%", borderRadius: "0" }}
+                    />
+                </Box>
+            ),
+        },
+        {
+            id: "theme-4",
+            label: "Christmas 1",
+            content: (
+                <Box width="100%" align="center" style={{ padding: "10px" }}>
+                    <Image
+                        src={christmas1Image}
+                        alt="Christmas Theme 1"
+                        width="100%"
+                        height="auto"
+                        borderRadius={'0px'}
+                        style={{ maxWidth: "100%", borderRadius: "0" }}
+                    />
+                </Box>
+            ),
+        },
+        {
+            id: "theme-5",
+            label: "Christmas 2",
+            content: (
+                <Box width="100%" align="center" style={{ padding: "10px" }}>
+                    <Image
+                        src={christmas2Image}
+                        alt="Christmas Theme 2"
+                        width="100%"
+                        height="auto"
+                        borderRadius={'0px'}
+                        style={{ maxWidth: "100%", borderRadius: "0" }}
+                    />
+                </Box>
+            ),
+        },
+    ];
+
     useEffect(() => {
         const fetchFonts = async () => {
             const fonts = await site.getFontsHtml([]);
@@ -222,20 +313,26 @@ const PanelAppearance: React.FC<Props> = ({
                 <SidePanel.Section title={renderSectionTitle("Theme", "Select the visual style of your countdown (Ex: box style, minimal, inline). Only the timer design changes.")}>
                     <SidePanel.Field divider={false}>
                         <FormField>
-                            <Box direction="horizontal" style={{ justifyContent: "space-between" }}>
-                                <Text secondary size="small">Content Here</Text>
+                            <Box width="100%" direction="vertical" style={{ padding: "16px 0" }}>
+                                <Carousel
+                                    items={themeItems}
+                                    autoSlide={false}
+                                    showNavigation={true}
+                                    showDots={true}
+                                    navigationPosition="bottom"
+                                />
                             </Box>
                         </FormField>
                     </SidePanel.Field>
                 </SidePanel.Section>
 
-                <SidePanel.Section title={renderSectionTitle("Font", "Chose the font style for your countdown text to align with your website's branding")}>
+                {/* <SidePanel.Section title={renderSectionTitle("Font", "Chose the font style for your countdown text to align with your website's branding")}>
                     <SidePanel.Field divider={false}>
                         <FormField>
 
                         </FormField>
                     </SidePanel.Field>
-                </SidePanel.Section>
+                </SidePanel.Section> */}
             </SidePanel.Content>
 
         </SidePanel>
