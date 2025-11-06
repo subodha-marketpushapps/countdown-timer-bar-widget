@@ -1,0 +1,287 @@
+/* Custom Image Slider Styles - Wix CLI Compatible */
+.custom-image-slider-container {
+  width: 100%;
+  max-width: 800px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+
+  backdrop-filter: blur(10px);
+  animation: scaleIn 0.8s ease-out 0.4s both;
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideTransition {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes floatAnimation {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Slide Content */
+.custom-slide-content {
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-slide-content.transitioning {
+  animation: slideTransition 0.6s ease-in-out;
+}
+
+/* Pagination Dots */
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 0 20px 12px 20px;
+  margin-top: -24px;
+}
+
+.custom-pagination-dot {
+  width: 16px;
+  height: 4px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(118, 118, 242, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-pagination-dot:hover {
+  background: #ffffff98;
+  transform: scale(1.1);
+}
+
+.custom-pagination-dot.active {
+  width: 20px;
+  height: 5px;
+  background: #ffffff;
+  transform: scale(1.2);
+}
+
+.custom-pagination-dot:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+/* Slide Counter */
+.custom-slide-counter {
+  text-align: center;
+  font-size: 12px;
+  color: #718096;
+  font-weight: 500;
+  padding: 0 20px 12px 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .custom-slide-image-container {
+    height: 200px;
+  }
+
+  .custom-slide-text-content {
+    padding: 16px;
+  }
+
+  .custom-slide-title {
+    font-size: 16px;
+  }
+
+  .custom-slide-description {
+    font-size: 13px;
+  }
+
+  .custom-nav-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .custom-nav-prev {
+    left: 8px;
+  }
+
+  .custom-nav-next {
+    right: 8px;
+  }
+}
+
+/* Custom Pagination */
+.custom-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: rgba(118, 118, 242, 0.3) !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  margin: 0 4px !important;
+}
+
+.custom-bullet-active {
+  background: #7676f2 !important;
+  transform: scale(1.2) !important;
+  box-shadow: 0 0 10px rgba(118, 118, 242, 0.5) !important;
+}
+
+.custom-bullet:hover {
+  background: #7676f2 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Custom Navigation Buttons */
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #4a5568;
+}
+
+.swiper-button-prev-custom {
+  left: 10px;
+}
+
+.swiper-button-next-custom {
+  right: 10px;
+}
+
+.swiper-button-prev-custom:hover,
+.swiper-button-next-custom:hover {
+  background: white;
+  color: #7676f2;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.swiper-button-prev-custom:active,
+.swiper-button-next-custom:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Slide Counter */
+.slide-counter {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+}
+
+/* Swiper Pagination Override */
+.feature-swiper .swiper-pagination {
+  bottom: 15px !important;
+  left: 15px !important;
+  width: auto !important;
+  text-align: left !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .swiper-image-slider-container {
+    max-width: 100%;
+    margin: 0 16px;
+  }
+
+  .feature-swiper {
+    height: 350px;
+  }
+
+  .slide-image-container {
+    height: 200px;
+  }
+
+  .slide-text-content {
+    padding: 16px;
+  }
+
+  .slide-title {
+    font-size: 16px;
+  }
+
+  .slide-description {
+    font-size: 13px;
+  }
+
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    width: 35px;
+    height: 35px;
+  }
+
+  .swiper-button-prev-custom {
+    left: 8px;
+  }
+
+  .swiper-button-next-custom {
+    right: 8px;
+  }
+}
+
+/* Loading Animation */
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatAnimation {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-5px);
+  }
+}

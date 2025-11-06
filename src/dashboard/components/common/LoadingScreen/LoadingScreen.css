@@ -1,0 +1,222 @@
+/* Progress Bar Animations */
+@keyframes primaryShine {
+  0% {
+    transform: translateX(-80px) skewX(-25deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(150px) skewX(-25deg);
+  }
+  85% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(350px) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+@keyframes secondaryShine {
+  0% {
+    transform: translateX(-60px) skewX(-20deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(340px) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    transform: translateX(0px) scale(0);
+    opacity: 0;
+  }
+  25% {
+    transform: translateX(75px) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(150px) scale(0.5);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateX(225px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes progressPulse {
+  0%,
+  100% {
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5),
+      0 1px 5px rgba(118, 118, 242, 0.3);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Progress Bar Container */
+.progress-bar-container {
+  width: 300px;
+  height: 16px;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  padding: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Main Progress Bar */
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #96d0e0 0%,
+    #8bb8e8 25%,
+    #7fa0f0 50%,
+    #7688f6 75%,
+    #7676f2 100%
+  );
+  border-radius: 12px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: calc(100% - 4px);
+  max-height: calc(100% - 4px);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Primary Shine Effect */
+.progress-bar-shine-primary {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 100%;
+  width: 60px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.1) 75%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: primaryShine 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  z-index: 2;
+  filter: blur(0.5px);
+  clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);
+}
+
+/* Secondary Shine Effect */
+.progress-bar-shine-secondary {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 100%;
+  width: 40px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  border-radius: 50%;
+  animation: secondaryShine 2.5s ease-out infinite 0.5s;
+  z-index: 1;
+  transform: skewX(-20deg);
+}
+
+/* Sparkle Effects */
+.progress-bar-sparkle-1 {
+  position: absolute;
+  top: 4px;
+  left: 2px;
+  height: 2px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  animation: sparkle 2s ease-in-out infinite;
+  z-index: 3;
+}
+
+.progress-bar-sparkle-2 {
+  position: absolute;
+  top: 8px;
+  left: 2px;
+  height: 1px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  animation: sparkle 2s ease-in-out infinite 0.7s;
+  z-index: 3;
+}
+
+/* Loading Screen Layout */
+.loading-screen-left {
+  background: white;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 0);
+  background-size: 12px 12px;
+  background-position: -19px -19px;
+}
+
+.loading-screen-right {
+}
+
+.loading-screen-progress-section {
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.loading-screen-step-list {
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}

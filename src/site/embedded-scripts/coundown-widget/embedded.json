@@ -1,0 +1,7 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/embedded-script.json",
+  "id": "47363687-4e9d-4b87-af61-5811d8664a1d",
+  "name": "Coundown Widget",
+  "scriptType": "FUNCTIONAL",
+  "placement": "BODY_START"
+}
