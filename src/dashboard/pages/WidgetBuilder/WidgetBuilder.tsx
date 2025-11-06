@@ -242,22 +242,18 @@ const Builder: React.FC<{
               onClick={(_, data) => setSelectedSidebar(Number(data.id))}
               zIndex={100000000}
             />
-            <SidePanelContainer isShowing={selectedSidebar !== -1}>
+            <SidePanelContainer isShowing={selectedSidebar !== -1} >
+              <div style={{ backgroundColor: "#FFFFFF", border:"2px solid #fff" }}>
               {selectedSidebar === 0 && (
-                <PanelTimer
-                  options={draftState.content}
-                  onChange={handleContentChange}
-                  onCloseButtonClick={() => setSelectedSidebar(-1)}
-                />
+                <div>
+                  <PanelTimer
+                    options={draftState.content}
+                    onChange={handleContentChange}
+                    onCloseButtonClick={() => setSelectedSidebar(-1)}
+                  />
+                </div>
               )}
               {selectedSidebar === 1 && (
-                <PanelContent
-                  options={draftState.content}
-                  onChange={handleContentChange}
-                  onCloseButtonClick={() => setSelectedSidebar(-1)}
-                />
-              )}
-              {selectedSidebar === 2 && (
                 <PanelAppearance
                   options={draftState.content}
                   onChange={handleContentChange}
@@ -271,13 +267,14 @@ const Builder: React.FC<{
                   onCloseButtonClick={() => setSelectedSidebar(-1)}
                 />
               )}
+              </div>
             </SidePanelContainer>
 
             {/* Preview Area - White Background Box on the Right */}
             <Box
               flex="1"
               height="100%"
-              backgroundColor="#ffffff"
+              backgroundColor="#FFFFFF96"
               position="relative"
               style={{
                 overflow: "auto",
@@ -324,6 +321,7 @@ const Builder: React.FC<{
                       width="100%"
                       height="100%"
                       padding="20px"
+                      
                       style={{
                         backgroundColor: "rgba(0, 0, 0, 0.5)",
                         zIndex: 1,
@@ -335,11 +333,10 @@ const Builder: React.FC<{
 
                     {/* Card Container */}
                     <Box
-                      backgroundColor="#ffffff"
                       margin={"24px"}
                       height="100%"
                       padding="24px"
-
+                      backgroundColor="#FFFFFF"
                       style={{
                         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
                         position: "relative",
