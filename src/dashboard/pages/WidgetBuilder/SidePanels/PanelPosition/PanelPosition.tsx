@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, FormField, SidePanel, Radio } from "@wix/design-system";
+import { Box, FormField, SidePanel, RadioGroup } from "@wix/design-system";
 
 import { WidgetStyles } from "../../../../../interfaces";
 import { DEFAULT_PANEL_WIDTH } from "../SidePanelContainer";
@@ -45,12 +45,24 @@ const PanelPosition: React.FC<Props> = ({
       <SidePanel.Section title={renderSectionTitle("Position")}>
           <SidePanel.Field divider={false}>
             <FormField>
-              <Box direction="vertical" gap="8px">
-                <Radio label="Centered Overlay Banner" value="centered_overlay" />
-                <Radio label="Static Top Banner" value="static_top" />
-                <Radio label="Floating Top Banner" value="floating_top" />
-                <Radio label="Floating Bottom Banner" value="floating_bottom" />
-              </Box>
+              <RadioGroup
+                value={options.L_Widget_Position || "floating_top"}
+                onChange={(value) => onChange({ ...options, L_Widget_Position: value as any })}
+                display="vertical"
+              >
+                <RadioGroup.Radio value="centered_overlay">
+                  Centered Overlay Banner
+                </RadioGroup.Radio>
+                <RadioGroup.Radio value="static_top">
+                  Static Top Banner
+                </RadioGroup.Radio>
+                <RadioGroup.Radio value="floating_top">
+                  Floating Top Banner
+                </RadioGroup.Radio>
+                <RadioGroup.Radio value="floating_bottom">
+                  Floating Bottom Banner
+                </RadioGroup.Radio>
+              </RadioGroup>
             </FormField>
           </SidePanel.Field>
         </SidePanel.Section>

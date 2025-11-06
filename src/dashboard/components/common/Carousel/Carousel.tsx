@@ -18,6 +18,7 @@ export interface CarouselProps {
   navigationPosition?: "bottom" | "center";
   className?: string;
   onSlideChange?: (index: number) => void;
+  initialIndex?: number;
 }
 
 const Carousel: React.FC<CarouselProps> = ({
@@ -29,9 +30,17 @@ const Carousel: React.FC<CarouselProps> = ({
   navigationPosition = "bottom",
   className = "",
   onSlideChange,
+  initialIndex = 0,
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Update current index when initialIndex changes
+  useEffect(() => {
+    if (initialIndex >= 0 && initialIndex < items.length) {
+      setCurrentIndex(initialIndex);
+    }
+  }, [initialIndex, items.length]);
 
   // Auto slide functionality
   useEffect(() => {

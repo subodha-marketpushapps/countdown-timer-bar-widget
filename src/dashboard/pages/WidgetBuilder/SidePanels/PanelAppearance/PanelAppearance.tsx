@@ -257,6 +257,22 @@ const PanelAppearance: React.FC<Props> = ({
         },
     ];
 
+    // Get initial carousel indices based on selected values
+    const getTemplateIndex = () => {
+        const index = templateItems.findIndex(item => item.id === options.selectedTemplate);
+        return index >= 0 ? index : 0;
+    };
+
+    const getClockStyleIndex = () => {
+        const index = clockItems.findIndex(item => item.id === options.selectedClockStyle);
+        return index >= 0 ? index : 0;
+    };
+
+    const getThemeIndex = () => {
+        const index = themeItems.findIndex(item => item.id === options.selectedTheme);
+        return index >= 0 ? index : 0;
+    };
+
     useEffect(() => {
         const fetchFonts = async () => {
             const fonts = await site.getFontsHtml([]);
@@ -288,6 +304,13 @@ const PanelAppearance: React.FC<Props> = ({
                                     showNavigation={true}
                                     showDots={true}
                                     navigationPosition="bottom"
+                                    initialIndex={getTemplateIndex()}
+                                    onSlideChange={(index) => {
+                                        const selectedTemplate = templateItems[index]?.id;
+                                        if (selectedTemplate) {
+                                            onChange({ ...options, selectedTemplate });
+                                        }
+                                    }}
                                 />
                             </Box>
                         </FormField>
@@ -304,6 +327,13 @@ const PanelAppearance: React.FC<Props> = ({
                                     showNavigation={true}
                                     showDots={true}
                                     navigationPosition="bottom"
+                                    initialIndex={getClockStyleIndex()}
+                                    onSlideChange={(index) => {
+                                        const selectedClockStyle = clockItems[index]?.id;
+                                        if (selectedClockStyle) {
+                                            onChange({ ...options, selectedClockStyle });
+                                        }
+                                    }}
                                 />
                             </Box>
                         </FormField>
@@ -320,6 +350,13 @@ const PanelAppearance: React.FC<Props> = ({
                                     showNavigation={true}
                                     showDots={true}
                                     navigationPosition="bottom"
+                                    initialIndex={getThemeIndex()}
+                                    onSlideChange={(index) => {
+                                        const selectedTheme = themeItems[index]?.id;
+                                        if (selectedTheme) {
+                                            onChange({ ...options, selectedTheme });
+                                        }
+                                    }}
                                 />
                             </Box>
                         </FormField>

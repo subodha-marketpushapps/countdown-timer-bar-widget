@@ -45,7 +45,12 @@ const PanelContent: React.FC<Props> = ({
               <Box direction="vertical" gap="8px">
                 <Text secondary size="small">Title</Text>
                 <Layout cols={1} gap="12px">
-                  <Input size="small" placeholder="" />
+                  <Input 
+                    size="small" 
+                    placeholder="Limited Time Offer"
+                    value={options.title || ""}
+                    onChange={(e) => onChange({ ...options, title: e.target.value })}
+                  />
                 </Layout>
               </Box>
             </FormField>
@@ -55,7 +60,12 @@ const PanelContent: React.FC<Props> = ({
               <Box direction="vertical" gap="8px">
                 <Text secondary size="small">Subtitle</Text>
                 <Layout cols={1} gap="12px">
-                  <Input size="small" placeholder="" />
+                  <Input 
+                    size="small" 
+                    placeholder="Up to 50% Off"
+                    value={options.subtitle || ""}
+                    onChange={(e) => onChange({ ...options, subtitle: e.target.value })}
+                  />
                 </Layout>
               </Box>
             </FormField>
@@ -67,7 +77,11 @@ const PanelContent: React.FC<Props> = ({
             <FormField>
               <Box direction="horizontal" style={{ justifyContent: "space-between" }}>
                 <Text secondary size="small">Show Button</Text>
-                <ToggleSwitch size="small" />
+                <ToggleSwitch 
+                  size="small" 
+                  checked={options.showButton ?? true}
+                  onChange={(e) => onChange({ ...options, showButton: e.target.checked })}
+                />
               </Box>
             </FormField>
           </SidePanel.Field>
@@ -76,7 +90,12 @@ const PanelContent: React.FC<Props> = ({
               <Box direction="vertical" gap="8px">
                 <Text secondary size="small">Button Text</Text>
                 <Layout cols={1} gap="12px">
-                  <Input size="small" placeholder="" />
+                  <Input 
+                    size="small" 
+                    placeholder="Shop Now"
+                    value={options.buttonText || ""}
+                    onChange={(e) => onChange({ ...options, buttonText: e.target.value })}
+                  />
                 </Layout>
               </Box>
             </FormField>
@@ -86,7 +105,12 @@ const PanelContent: React.FC<Props> = ({
               <Box direction="vertical" gap="8px">
                 <Text secondary size="small">Button Link</Text>
                 <Layout cols={1} gap="12px">
-                  <Input size="small" placeholder="" />
+                  <Input 
+                    size="small" 
+                    placeholder="https://example.com/shop"
+                    value={options.buttonLink || ""}
+                    onChange={(e) => onChange({ ...options, buttonLink: e.target.value })}
+                  />
                 </Layout>
               </Box>
             </FormField>
@@ -97,13 +121,21 @@ const PanelContent: React.FC<Props> = ({
               <FormField>
                 <Box direction="horizontal" style={{ justifyContent: "space-between" }}>
                   <Text secondary size="small">Make the entire timer clickable</Text>
-                  <ToggleSwitch size="small" />
+                  <ToggleSwitch 
+                    size="small" 
+                    checked={options.makeEntireTimerClickable ?? false}
+                    onChange={(e) => onChange({ ...options, makeEntireTimerClickable: e.target.checked })}
+                  />
                 </Box>
               </FormField>
               <FormField>
                 <Box direction="horizontal" style={{ justifyContent: "space-between" }}>
                   <Text secondary size="small">Open in New Tab</Text>
-                  <ToggleSwitch size="small" />
+                  <ToggleSwitch 
+                    size="small" 
+                    checked={options.openInNewTab ?? true}
+                    onChange={(e) => onChange({ ...options, openInNewTab: e.target.checked })}
+                  />
                 </Box>
               </FormField>
             </Box>
@@ -115,7 +147,11 @@ const PanelContent: React.FC<Props> = ({
             <FormField>
               <Box direction="horizontal" style={{ justifyContent: "space-between" }}>
                 <Text secondary size="small">Show Close Button</Text>
-                <ToggleSwitch size="small" />
+                <ToggleSwitch 
+                  size="small" 
+                  checked={options.showCloseButton ?? true}
+                  onChange={(e) => onChange({ ...options, showCloseButton: e.target.checked })}
+                />
               </Box>
             </FormField>
           </SidePanel.Field>

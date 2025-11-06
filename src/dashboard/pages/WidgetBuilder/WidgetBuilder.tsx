@@ -6,26 +6,23 @@ import {
   Loader,
   Box,
   StatusToast,
-  MobilePreviewWidget,
   Text,
+  IconButton,
 } from "@wix/design-system";
 import * as Icons from "@wix/wix-ui-icons-common";
 // import WidgetController from "../../../components/WidgetWhatsappChat/WidgetController";
 // import WidgetPreviewControlPanel from "../../components/dev/WidgetPreviewControlPanel";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { editorState, wixSiteDataState } from "../../services/state";
+import { useRecoilValue } from "recoil";
+import { wixSiteDataState } from "../../services/state";
 import { useSmartWidgetStateManager } from "../../hooks/useSmartDevelopment";
-import { useWidgetPreviewControl } from "../../hooks/useWidgetPreviewControl";
 import { useBaseModal } from "../../services/providers/BaseModalProvider";
 import { useStatusToast } from "../../services/providers/StatusToastProvider";
 import {
   DEV_MODE,
-  DEV_CONFIG,
   getCurrentDevMode,
 } from "../../../constants/dev-modes";
 import WidgetEditorHeader from "./WidgetEditorHeader";
 import SidePanelContainer from "./SidePanels/SidePanelContainer";
-import WidgetBuilderBackground from "./WidgetBuilderBackground";
 import { ModalSuccessfullyPublished } from "./Modals";
 
 import {
@@ -50,7 +47,6 @@ const Builder: React.FC<{
     updateDraft,
     updateStyles,
     updateContent,
-    updateAgents,
     save,
     publish,
     unpublish,
@@ -68,18 +64,13 @@ const Builder: React.FC<{
     enableOptimisticUpdates: true,
   });
 
-  const [editorStateData, setEditorStateData] = useRecoilState(editorState);
   const wixSiteData = useRecoilValue(wixSiteDataState);
   const { checkAndDisplayFeedbackModal } = useBaseModal();
   const { addToast } = useStatusToast();
 
-  const [selectedSidebar, setSelectedSidebar] = useState<number>(
-    showAgentPanelFirst ? 2 : 0 // Show Agents panel (index 2) for brand new users
-  );
-  const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
-  const [forceWelcomeTab, setForceWelcomeTab] = useState(false);
+  const [selectedSidebar, setSelectedSidebar] = useState<number>(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [indicatorPreviewToken, setIndicatorPreviewToken] = useState(0); // Token for indicator preview control
+  const [isWidgetClosed, setIsWidgetClosed] = useState(false);
 
 
 
@@ -88,8 +79,8 @@ const Builder: React.FC<{
   const sidebarItems = [
     { id: 0, label: "Timer", icon: <Icons.Timer /> },
     { id: 1, label: "Content", icon: <Icons.SiteContent /> },
-    { id: 2, abel: "Appearance", icon: <Icons.Template /> },
-    { id: 3, abel: "Position", icon: <Icons.Pin /> },
+    { id: 2, label: "Appearance", icon: <Icons.Template /> },
+    { id: 3, label: "Position", icon: <Icons.Pin /> },
   ];
 
   // Handler functions using the new state manager
@@ -107,12 +98,6 @@ const Builder: React.FC<{
     [updateContent]
   );
 
-  const handleAgentsChange = useCallback(
-    (agents: any) => {
-      updateAgents(agents, { source: "agents-panel" });
-    },
-    [updateAgents]
-  );
 
   const handleVisibilityDataChange = useCallback(
     (visibilityData: any) => {
@@ -137,33 +122,19 @@ const Builder: React.FC<{
     [updateDraft]
   );
 
-  // Initialize widget preview control
-  const previewControl = useWidgetPreviewControl(
-    draftState.content,
-    draftState.styles,
-    handleContentChange
-  );
 
-  // Agent validation warnings (only in full mode)
+  // Validation warnings (only in full mode)
   useEffect(() => {
     if (DEV_MODE !== "full") return; // Skip validation in dev modes
 
-    const isMultiChat = draftState.content.mainBehavior === "multi-chat";
-    const isOfflineAgentsShouldBeHidden =
-      draftState.content.unavailableAgentBehavior === "hide";
-
-    const agents = isMultiChat
-      ? draftState.content.members
-      : [draftState.content.members[0]];
-
-    // const onlineAgents = agents.filter((agent: any) =>
-    //   checkAgentAvailability(agent)
-    // );
-    const availableAgents = agents.filter((agent: any) => agent?.isVisible);
-
-    // These warnings would be handled by the validation system
-    // but we keep the UX logic here for now
+    // Add countdown widget validation logic here if needed
+    // For example: validate timer dates, check if timer has ended, etc.
   }, [draftState.content, selectedSidebar]);
+
+  // Reset widget closed state when content or styles change
+  useEffect(() => {
+    setIsWidgetClosed(false);
+  }, [draftState.content, draftState.styles]);
 
 
 
@@ -235,29 +206,7 @@ const Builder: React.FC<{
     setShowSuccessModal(false);
   }, []);
 
-  // Indicator preview handlers
-  const handleIndicatorPreviewReset = useCallback(() => {
-    // Reset preview control to show badge only briefly
-    previewControl.closeModal();
-    // After a brief moment, return to auto mode
-    setTimeout(() => {
-      previewControl.autoModal();
-    }, 300);
-  }, [previewControl]);
 
-  const handleIndicatorSmartPreview = useCallback(() => {
-    // Increment the token to trigger smart indicator preview
-    setIndicatorPreviewToken((prev) => prev + 1);
-  }, []);
-
-  // Compute a key for WidgetController based on welcome popup settings and preview refresh
-  const welcomePopupKey = [
-    draftState.content.showWelcomePopup,
-    draftState.content.welcomeMessage,
-    draftState.content.welcomePopupDelay,
-    draftState.content.welcomeContentType,
-    previewRefreshKey,
-  ].join("|");
 
   return (
     <Layout gap={0}>
@@ -284,7 +233,7 @@ const Builder: React.FC<{
             <Loader text="Loading Widget Data..." size="large" />
           </Box>
         ) : (
-          <Box gap="0" height="calc(100dvh - 66px)">
+          <Box gap="0" height="calc(100dvh - 66px)" direction="horizontal">
             <ComposerSidebar
               labelPlacement="bottom"
               items={sidebarItems}
@@ -299,44 +248,6 @@ const Builder: React.FC<{
                   options={draftState.content}
                   onChange={handleContentChange}
                   onCloseButtonClick={() => setSelectedSidebar(-1)}
-                  onBehaviorChange={(behavior) => {
-                    // Auto-adjust preview based on behavior change
-                    previewControl.simulateBehaviorChange(behavior);
-
-                    // Show the modal briefly for single-chat and multi-chat, then revert to auto mode
-                    if (
-                      behavior === "single-chat" ||
-                      behavior === "multi-chat"
-                    ) {
-                      setTimeout(() => {
-                        // Open modal to show user the difference
-                        previewControl.openModal();
-
-                        // Then revert to auto mode after a brief moment so user can interact naturally
-                        setTimeout(() => {
-                          previewControl.autoModal();
-                        }, 1000); // Show for 1 second, then back to auto
-                      }, 50);
-                    } else if (behavior === "direct") {
-                      // For direct mode, just ensure modal is closed and stay in auto mode
-                      setTimeout(() => {
-                        previewControl.autoModal();
-                      }, 50);
-                    }
-                  }}
-                  onWelcomeMessagePreview={() => {
-                    // Trigger a natural widget refresh to show welcome popup
-                    setPreviewRefreshKey((k) => k + 1);
-                  }}
-                  onOpenWelcomeContent={() => {
-                    // Open Content tab (index 1) and force welcome subtab
-                    setForceWelcomeTab(true);
-                    setSelectedSidebar(1);
-                    // Reset force flag after a brief delay
-                    setTimeout(() => setForceWelcomeTab(false), 100);
-                  }}
-                  onIndicatorPreviewReset={handleIndicatorPreviewReset}
-                  onIndicatorSmartPreview={handleIndicatorSmartPreview}
                 />
               )}
               {selectedSidebar === 1 && (
@@ -344,20 +255,13 @@ const Builder: React.FC<{
                   options={draftState.content}
                   onChange={handleContentChange}
                   onCloseButtonClick={() => setSelectedSidebar(-1)}
-                  previewControl={previewControl}
-                  onWelcomeMessagePreview={() => {
-                    // Trigger a natural widget refresh to show welcome popup
-                    setPreviewRefreshKey((k) => k + 1);
-                  }}
-                  forceWelcomeTab={forceWelcomeTab}
                 />
               )}
               {selectedSidebar === 2 && (
                 <PanelAppearance
                   options={draftState.content}
-                  onChange={handleStylesChange}
+                  onChange={handleContentChange}
                   onCloseButtonClick={() => setSelectedSidebar(-1)}
-                  previewControl={previewControl}
                 />
               )}
               {selectedSidebar === 3 && (
@@ -367,118 +271,120 @@ const Builder: React.FC<{
                   onCloseButtonClick={() => setSelectedSidebar(-1)}
                 />
               )}
-
             </SidePanelContainer>
 
-            <WidgetBuilderBackground>
-              {/* Development Mode Indicator */}
-              {DEV_MODE !== "full" && (
+            {/* Preview Area - White Background Box on the Right */}
+            <Box
+              flex="1"
+              height="100%"
+              backgroundColor="#ffffff"
+              position="relative"
+              style={{
+                overflow: "auto",
+              }}
+            >
+              {/* Countdown Widget Preview */}
+              {!isLoading && draftState.content && draftState.styles && !isWidgetClosed && (
                 <Box
-                  position="absolute"
-                  top="16px"
-                  left="16px"
-                  zIndex={10}
-                  backgroundColor="Y30"
-                  padding="8px 12px"
-                  borderRadius="4px"
-                  border="1px solid #FFA726"
+                  width="100%"
+                  height="100%"
+                  position="relative"
+                  style={{
+                    padding:
+                      draftState.styles.L_Widget_Position === "static_top"
+                        ? `${draftState.styles.L_Widget_Position_Desktop?.top || 0}px 20px 20px 20px`
+                        : draftState.styles.L_Widget_Position === "floating_top"
+                        ? `${draftState.styles.L_Widget_Position_Desktop?.top || 0}px 20px 20px 20px`
+                        : draftState.styles.L_Widget_Position === "floating_bottom"
+                        ? `20px 20px ${draftState.styles.L_Widget_Position_Desktop?.bottom || 0}px 20px`
+                        : draftState.styles.L_Widget_Position === "centered_overlay"
+                        ? "20px"
+                        : "20px",
+                    display:
+                      draftState.styles.L_Widget_Position === "centered_overlay"
+                        ? "flex"
+                        : "block",
+                    alignItems:
+                      draftState.styles.L_Widget_Position === "centered_overlay"
+                        ? "center"
+                        : "flex-start",
+                    justifyContent:
+                      draftState.styles.L_Widget_Position === "centered_overlay"
+                        ? "center"
+                        : "flex-start",
+                    minHeight: "100%",
+                  }}
                 >
-                  <Text size="small" weight="bold">
-                    🚀 DEV MODE: {getCurrentDevMode().toUpperCase()}
-                  </Text>
-                </Box>
-              )}
+                  {/* Overlay Background for Centered Overlay */}
+                  {draftState.styles.L_Widget_Position === "centered_overlay" && (
+                    <Box
+                      position="absolute"
+                      top="0"
+                      left="0"
+                      width="100%"
+                      height="100%"
+                      padding="20px"
+                      style={{
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        zIndex: 1,
+                      }}
+                    />
+                  )}
 
-              {/* Preview Control Panel - Only show in dev mode */}
-              {!isLoading && DEV_CONFIG.ui.showPreviewControls && (
-                <Box
-                  position="absolute"
-                  top="100px"
-                  left="16px"
-                  zIndex={10}
-                >
-                  <CountDownTemplate
-                    clockConfig={{
-                        labelPosition: "bottom",
-                        numberStyle: "filled",
-                        endDate: new Date("2025-12-31"),
-                        endTime: "23:59:59",
-                        backgroundColor: "#f59e0b",
-                        textColor: "#ffffff",
-                    }}
-                    title="Flash Sale"
-                    subTitle="Limited Stock"
-                    buttonText="Buy Now"
-                    buttonLink="https://example.com/buy"
-                    // scale={0.5}
-                />
+                  {/* Widget Container */}
 
-                  {/* <h2>WidgetPreviewControlPanel</h2> */}
-                  {/* <WidgetPreviewControlPanel
-                    previewControl={previewControl}
-                    agents={draftState.content.members}
-                    currentBehavior={draftState.content.mainBehavior}
-                  /> */}
-                </Box>
-              )}
+                    {/* Card Container */}
+                    <Box
+                      backgroundColor="#ffffff"
+                      margin={"24px"}
+                      height="100%"
+                      padding="24px"
 
-              {/* Mobile Preview */}
-              {editorStateData.viewType === "mobileView" && (
-                <MobilePreviewWidget skin="gradient">
-                  <Box
-                    align="center"
-                    verticalAlign="middle"
-                    height="100%"
-                    backgroundColor="transparent" // Let background component handle color
-                    position="relative"
-                    zIndex={2}
-                  >
-                    {/* <WidgetController
-                      key={welcomePopupKey}
-                      styles={draftState.styles}
-                      widgetContent={draftState.content}
-                      isDevMode={true}
-                      manualMobile={true}
-                      forceModalState={previewControl.state.forceModalOpen}
-                      forceSelectedAgent={previewControl.state.forceSelectedAgent}
-                      previewMode={previewControl.state.previewMode}
-                      forceStep={previewControl.state.forceStep}
-                      previewAgent={previewControl.state.previewAgent}
-                      indicatorSmartPreviewToken={indicatorPreviewToken}
-                      onStateChange={(state) => { }}
-                    /> */}
-                  </Box>
-                </MobilePreviewWidget>
-              )}
-
-              {/* Desktop Preview */}
-              {editorStateData.viewType === "desktopView" && (
-                <Box
-                align="center"
-                verticalAlign="middle"
-                height="100%"
-                backgroundColor="transparent" // Let background component handle color
-                position="relative"
-                zIndex={2}
-              >
+                      style={{
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                        position: "relative",
+                      }}
+                    >
+                      <div>
+                      <CountDownTemplate
+                        clockConfig={{
+                          labelPosition:
+                            draftState.styles.D_Clock_LabelPosition || "bottom",
+                          numberStyle:
+                            draftState.styles.D_Clock_NumberStyle || "fillEachDigit",
+                          endDate:
+                            draftState.content.timerConfig?.endDate ||
+                            new Date("2025-12-31"),
+                          endTime:
+                            draftState.content.timerConfig?.endTime || "23:59:59",
+                          backgroundColor:
+                            draftState.styles.D_Clock_BackgroundColor || "#2563eb",
+                          textColor:
+                            draftState.styles.D_Clock_TextColor || "#ffffff",
+                        }}
+                        title={draftState.content.title || "Limited Time Offer"}
+                        subTitle={draftState.content.subtitle || "Up to 50% Off"}
+                        buttonText={
+                          draftState.content.showButton
+                            ? draftState.content.buttonText || "Shop Now"
+                            : ""
+                        }
+                        buttonLink={draftState.content.buttonLink || ""}
+                        backgroundColor={draftState.styles.D_Widget_BackgroundColor}
+                        textColor={draftState.styles.D_Widget_TextColor}
+                        buttonBackgroundColor={draftState.styles.D_Widget_ButtonBackgroundColor}
+                        buttonTextColor={draftState.styles.D_Widget_ButtonTextColor}
+                        backgroundImage={draftState.styles.D_Widget_BackgroundImage}
+                        borderRadius={draftState.styles.L_Widget_CornerRounding}
+                        showCloseButton={draftState.content.showCloseButton}
+                        onClose={() => setIsWidgetClosed(true)}
+                      />
+                      </div>
+                    </Box>
 
                 </Box>
-                // <WidgetController
-                //   key={welcomePopupKey}
-                //   styles={draftState.styles}
-                //   widgetContent={draftState.content}
-                //   isDevMode={true}
-                //   manualMobile={false}
-                //   forceModalState={previewControl.state.forceModalOpen}
-                //   forceSelectedAgent={previewControl.state.forceSelectedAgent}
-                //   previewMode={previewControl.state.previewMode}
-                //   forceStep={previewControl.state.forceStep}
-                //   previewAgent={previewControl.state.previewAgent}
-                //   indicatorSmartPreviewToken={indicatorPreviewToken}
-                //   onStateChange={(state) => { }}
-                // />
               )}
-            </WidgetBuilderBackground>
+            </Box>
           </Box>
         )}
       </Cell>

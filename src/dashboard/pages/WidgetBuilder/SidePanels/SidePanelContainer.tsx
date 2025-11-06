@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Transition } from "@wix/design-system";
+import { Box } from "@wix/design-system";
 
 interface SidePanelContainerProps {
   children: React.ReactNode;

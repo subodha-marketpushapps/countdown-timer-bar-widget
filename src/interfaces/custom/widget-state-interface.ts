@@ -1,4 +1,4 @@
-import { WidgetContent, WidgetStyles, WidgetVisibilityData } from "./whatsapp-widget-interfaces";
+import { WidgetContent, WidgetStyles, WidgetVisibilityData } from "./countdown-widget-interfaces";
 
 export interface WidgetState {
   styles: WidgetStyles;
